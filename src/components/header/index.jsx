@@ -13,7 +13,7 @@ class Header extends Component {
 
     state = {
         currentTime: formatDate(Date.now()),
-        dayPictureUrl: '',
+        city: '',
         weather: ''
     }
 
@@ -25,9 +25,9 @@ class Header extends Component {
     }
 
     async getWeather(){
-        const {dayPictureUrl, weather} = await reqWheater('杭州')
+        const {city, weather} = await reqWheater('杭州')
         this.setState({
-            dayPictureUrl,
+            city,
             weather
         })
     }
@@ -76,7 +76,7 @@ class Header extends Component {
     }
 
     render() {
-        const {currentTime,dayPictureUrl,weather} = this.state
+        const {currentTime,city,weather} = this.state
         const username = memoryUtils.user.username
         const title = this.getTitle()
         return (
@@ -92,7 +92,7 @@ class Header extends Component {
                             {currentTime}
                         </span>
 
-                        <img src={dayPictureUrl} alt="weather" />
+                        <span>{city}</span>
 
                         <span>{weather}</span>
                     </div>

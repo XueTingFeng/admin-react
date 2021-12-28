@@ -14,11 +14,13 @@ export const reqAddUser = (user) => ajax('/login',user,'POST')
 
 export const reqWheater = (city) => {
     return new Promise((resolve,reject) => {
-        const url = `http://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`
+        const key = 'b00613924c3e1bc1a6eea45a1f918126'
+        const url = `https://restapi.amap.com/v3/weather/weatherInfo?parameters&city=${city}&key=${key}`
         jsonp(url,{},(err,data) => {
-        if(!err && data.status === 'success'){
-            const {dayPictureUrl, weather} = data.result[0].weather_data[0]
-            resolve({dayPictureUrl, weather})
+            console.log(data)
+        if(!err && data.status === "1"){
+            const {city, weather} = data.lives[0]
+            resolve({city, weather})
         }else{
             message.error('获取天气信息失败!')
         }
