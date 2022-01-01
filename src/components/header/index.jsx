@@ -17,14 +17,14 @@ class Header extends Component {
         weather: ''
     }
 
-    getTime(){
+    getTime = () => {
         this.intervalId = setInterval(() => {
             const currentTime = formatDate(Date.now())
             this.setState({currentTime})
         },1000)
     }
 
-    async getWeather(){
+     getWeather = async() =>{
         const {city, weather} = await reqWheater('杭州')
         this.setState({
             city,
