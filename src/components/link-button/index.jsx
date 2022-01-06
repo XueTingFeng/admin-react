@@ -1,4 +1,4 @@
-import React, { Children, Component } from 'react'
+import React from 'react'
 import './index.css'
 
 

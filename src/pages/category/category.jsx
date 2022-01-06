@@ -19,7 +19,6 @@ export default class Category extends Component {
     super(props)
 
     this.initColumns()
-    
   }
 
   initColumns = () => {
@@ -54,11 +53,11 @@ export default class Category extends Component {
     showStatus: 0,//标识确认框是否显示，0：都不显示 1：显示添加 2：显示更新
   }
 
-  getCategorys = async() => {
+  getCategorys = async(parentId) => {
     //发请求前显示loading
     this.setState({loading:true})
+    parentId = parentId || this.state.parentId
     //发送异步ajax请求，获取数据
-    const {parentId} = this.state
      const res = await reqCategorys(parentId)
      this.setState({loading:false})
      if(res.status === 0){
@@ -110,7 +109,28 @@ export default class Category extends Component {
   }
   //添加分类
   addCategory = () => {
-    console.log('addCate')
+    //进行表单验证，通过了才处理
+    this.form.validateFields().then(async(values) => {
+      //隐藏确定框
+      this.setState({
+        showStatus: 0
+      })
+
+      const {categoryName,parentId} = values
+      this.form.resetFields()
+      //收集数据并提交请求
+      const res = await reqAddCategory(categoryName,parentId)
+      if(res.status === 0){
+        //添加的分类就是当前分类列表下的分类
+        if(parentId === this.state.parentId){
+          //重新获取当前分类列表请求
+          this.getCategorys()
+        }else if(parentId === '0'){//在二级分类列表下添加一级分类项，重新获取一级分类列表，但不需要显示一级列表
+          this.getCategorys('0')
+        }
+        
+      }
+    })
   }
 
   showUpdate = (category) => {
@@ -122,7 +142,9 @@ export default class Category extends Component {
   }
 
   //更新分类
-  updateCategory = async() => {
+  updateCategory = () => {
+
+    //进行表单验证，通过了才处理
     this.form.validateFields().then(async(values) => {
       //隐藏确定框
       this.setState({
@@ -181,7 +203,6 @@ export default class Category extends Component {
                     loading={loading}
                     pagination={{defaultPageSize: 5,showQuickJumper: true}}
                     >
-                    
                     </Table>
 
                     <Modal
@@ -189,9 +210,10 @@ export default class Category extends Component {
                     visible={showStatus === 1}
                     onOk={this.addCategory}
                     onCancel={this.handleCancel}
+                    destroyOnClose={true}
                     >
 
-                      <AddForm/>
+                      <AddForm categorys={categorys} parentId={parentId} setForm={(form) => {this.form = form}}/>
 
                     </Modal>
                     

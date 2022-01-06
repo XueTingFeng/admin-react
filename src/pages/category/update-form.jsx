@@ -11,7 +11,7 @@ export default class UpdateForm extends Component {
 
     static propTypes = {
         categoryName: propTypes.string,
-        setForm: propTypes.func
+        setForm: propTypes.func.isRequired
     }
 
     componentDidMount(){
@@ -22,7 +22,13 @@ export default class UpdateForm extends Component {
         return (
             <div>
                 <Form ref={this.formRef}>
-                    <Item name='categoryName' initialValue={categoryName}>
+                    <Item 
+                    name='categoryName' 
+                    initialValue={categoryName}
+                    rules={[
+                        {required:true,message:'分类名称必须输入'}
+                    ]}
+                    >
                     <Input title='更新分类'  placeholder='请输入分类名称'></Input>
                     </Item>
                 </Form>
