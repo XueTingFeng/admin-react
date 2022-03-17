@@ -22,8 +22,7 @@ class LeftNav extends Component {
             </Menu.Item>
 				);
 			} else {
-        
-        const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
+        const cItem = item.children.find(cItem => path.indexOf(cItem.key)===0)
         if(cItem){
           this.openKey = item.key
         }
@@ -37,12 +36,14 @@ class LeftNav extends Component {
 		});
 	};
 
-  UNSAFE_compocomnentWillMount(){
+  componentDidMount(){
     this.menuNodes = this.getMenuNodes(menuList)
   }
     render() {
-      const openKey = this.openKey
-      const path = this.props.location.pathname
+      let path = this.props.location.pathname
+      if(path.indexOf('/product') === 0){ //当前是商品界面或商品子路由界面
+        path = '/product'
+      }
         return (
             <div>
                 <div className="left-nav">
@@ -58,7 +59,7 @@ class LeftNav extends Component {
                       mode="inline"
                       theme="dark"
                       selectedKeys={[path]}
-                      defaultOpenKeys={[openKey]}
+                      defaultOpenKeys={[this.openKey]}
                     >
                       {/* <Menu.Item key="/home" icon={<PieChartOutlined />}>
                         <Link to='/home'>

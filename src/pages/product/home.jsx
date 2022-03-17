@@ -72,7 +72,7 @@ export default class Home extends Component {
                     return(
                         <span>
                         <LinkButton onClick={() => this.props.history.push('/product/detail',product)}>详情</LinkButton>
-                        <LinkButton>修改</LinkButton>
+                        <LinkButton onClick={() => this.props.history.push('/product/addupdate',product)}>修改</LinkButton>
                         </span>
                     )                  
                 }//指定对应的属性，传入的是对应的属性值
@@ -137,7 +137,7 @@ export default class Home extends Component {
         )
 
         const extra = (
-            <Button type='primary'>添加商品</Button>
+            <Button type='primary' onClick={() => this.props.history.push('/product/addupdate')}>添加商品</Button>
         )
                   
         return (
