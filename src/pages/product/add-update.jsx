@@ -13,6 +13,12 @@ Product的子路由组件
 */
 export default class AddUpdate extends Component {
 
+    constructor(props){
+        super(props)
+
+        this.pw = React.createRef()
+    }
+
     state = {
         options: [],
     }
@@ -90,7 +96,10 @@ export default class AddUpdate extends Component {
 
     //表单数据收集
     onFinish = (values) => {
-        console.log(values)
+
+        const imgs = this.pw.current.getImgs()
+        console.log(values,imgs)
+
     }
 
     //自定义验证
@@ -114,7 +123,7 @@ export default class AddUpdate extends Component {
 
         const product = this.props.location.state
         this.isUpdate = !!product
-        const {name,desc,price,pCategoryId,categoryId} = this.props.location.state || {}
+        const {name,desc,price,pCategoryId,categoryId,imgs} = this.props.location.state || {}
 
         const categoryids = []
         if(this.isUpdate){
@@ -176,8 +185,8 @@ export default class AddUpdate extends Component {
                             </Cascader>
                         </Item>
 
-                        <Item label="商品图片">
-                            <PicturesWall></PicturesWall>
+                        <Item label="商品图片" name='pw'>
+                            <PicturesWall ref={this.pw} imgs={imgs}></PicturesWall>
                         </Item>
 
                         <Item label="商品详情">
@@ -193,3 +202,5 @@ export default class AddUpdate extends Component {
         )
     }
 }
+
+//父组件调用子组件方法在父组件中通过ref得到子组件标签对象
