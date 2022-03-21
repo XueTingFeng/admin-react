@@ -4,6 +4,7 @@ import { LeftOutlined } from '@ant-design/icons';
 
 import LinkButton from '../../components/link-button';
 import PicturesWall from './picturesWall';
+import RichTextEditor from './rich-text-editor';
 import { reqCategorys } from '../../api';
 
 const Item = Form.Item
@@ -17,6 +18,7 @@ export default class AddUpdate extends Component {
         super(props)
 
         this.pw = React.createRef()
+        this.editor = React.createRef()
     }
 
     state = {
@@ -98,7 +100,8 @@ export default class AddUpdate extends Component {
     onFinish = (values) => {
 
         const imgs = this.pw.current.getImgs()
-        console.log(values,imgs)
+        const detail = this.editor.current.getDetail()
+        console.log(values,imgs,detail)
 
     }
 
@@ -123,7 +126,7 @@ export default class AddUpdate extends Component {
 
         const product = this.props.location.state
         this.isUpdate = !!product
-        const {name,desc,price,pCategoryId,categoryId,imgs} = this.props.location.state || {}
+        const {name,desc,price,pCategoryId,categoryId,imgs,detail} = this.props.location.state || {}
 
         const categoryids = []
         if(this.isUpdate){
@@ -189,8 +192,8 @@ export default class AddUpdate extends Component {
                             <PicturesWall ref={this.pw} imgs={imgs}></PicturesWall>
                         </Item>
 
-                        <Item label="商品详情">
-                            <div>商品详情</div>
+                        <Item label="商品详情" labelCol= {{ span: 2}} wrapperCol={{span: 20}}>
+                            <RichTextEditor detail={detail} ref={this.editor}></RichTextEditor>
                         </Item>
 
                         <Item>
