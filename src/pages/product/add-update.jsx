@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import {Form,Select,Input,Card,Cascader,Button} from 'antd'
+import {Form,Input,Card,Cascader,Button, message} from 'antd'
 import { LeftOutlined } from '@ant-design/icons';
 
 import LinkButton from '../../components/link-button';
 import PicturesWall from './picturesWall';
 import RichTextEditor from './rich-text-editor';
-import { reqCategorys } from '../../api';
+import { reqCategorys, reqAddOrUpdateProduct } from '../../api';
 
 const Item = Form.Item
 const {TextArea} = Input
@@ -97,11 +97,38 @@ export default class AddUpdate extends Component {
       };
 
     //表单数据收集
-    onFinish = (values) => {
+    onFinish = async (values) => {
+
+        //收集数据
+        const {name, desc, price, categoryIds} = values
+        let pCategoryId,categoryId
+        if(categoryIds.length === 1){
+            pCategoryId = '0'
+            categoryId = categoryIds[0]
+        }else{
+            pCategoryId = categoryIds[0]
+            categoryId = categoryIds[1]
+        }
 
         const imgs = this.pw.current.getImgs()
         const detail = this.editor.current.getDetail()
-        console.log(values,imgs,detail)
+        
+        const product = {
+            name, desc, price, imgs, detail, categoryId, pCategoryId
+        }
+
+        //调用接口请求 添加/更新
+        if(this.isUpdate){
+            product.id = this.props.location.state._id
+        }
+        const res = await reqAddOrUpdateProduct(product)
+        //根据结果提示
+        if(res.status===0){
+            message.success(`${this.isUpdate ? '更新' : '添加'}商品成功`)
+            this.props.history.goBack()
+        }else{
+            message.error(`${this.isUpdate ? '更新' : '添加'}商品失败`)
+        }
 
     }
 

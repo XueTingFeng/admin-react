@@ -10,8 +10,10 @@ export function reqLogin(username,password){
     return ajax(`${BASE}/login`,{username,password},'POST')
 }
 
+//注册
 export const reqAddUser = (user) => ajax('/login',user,'POST')
 
+//高德天气接口,通过jsonp()进行跨域
 export const reqWheater = (city) => {
     return new Promise((resolve,reject) => {
         const key = 'b00613924c3e1bc1a6eea45a1f918126'
@@ -44,4 +46,12 @@ export const reqUpdateStatus = (productId,status) => ajax(BASE + '/manage/produc
 //搜索商品分页列表 searchType搜索的类型 productName,productDesc
 export const reqSearchProducts = ({pageNum,pageSize,searchName,searchType}) => ajax(BASE + '/manage/product/search',
 {pageNum,pageSize,[searchType]:searchName})
+//删除指定名称的图片
 export const reqDeleteImg = (name) => ajax(BASE + '/manage/img/delete',{name},'POST')
+//添加商品
+export const reqAddOrUpdateProduct = (product) => ajax(BASE + "/manage/product/" + (product.id?'update' : 'add'),product,'POST')
+//修改商品
+//export const reqUpdateProduct = (product) => ajax(BASE + "manage/product/update",product,'POST')
+
+//获取所有角色的列表
+export const reqRoles = () => ajax('/manage/role/list')
