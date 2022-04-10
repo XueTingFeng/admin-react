@@ -57,5 +57,9 @@ export const reqAddOrUpdateProduct = (product) => ajax(BASE + "/manage/product/"
 export const reqRoles = () => ajax('/manage/role/list')
 //添加角色
 export const reqAddRole = (roleName) => ajax('/manage/role/add',{roleName},'POST')
-//
+//更新权限
 export const reqUpdateRole = (role) => ajax('/manage/role/update',role,'POST')
+//获取所有用户的列表
+export const reqUsers = () => ajax('/manage/user/list')
+//删除指定用户
+export const reqDeleteUser = (userId) => ajax('/manage/user/delete',{userId},'POST')

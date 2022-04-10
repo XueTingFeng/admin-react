@@ -9,6 +9,7 @@ import {
 import {PAGE_SIZE} from '../../utils/constants'
 import { reqAddRole, reqRoles, reqUpdateRole } from '../../api'
 import Modal from 'antd/lib/modal/Modal'
+import { formatDate } from '../../utils/dateUtils'
 import AddForm from './add-form'
 import AuthForm from './auth-form'
 
@@ -37,11 +38,13 @@ export default class Role extends Component {
             },
             {
                 title:'创建时间',
-                dataIndex:'create_time'
+                dataIndex:'create_time',
+                render: (create_time) => formatDate(create_time)
             },
             {
                 title:'授权时间',
-                dataIndex:'auth_time'
+                dataIndex:'auth_time',
+                render:formatDate
             },
             {
                 title:'授权人',
