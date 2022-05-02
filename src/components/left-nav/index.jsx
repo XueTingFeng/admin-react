@@ -6,33 +6,52 @@ import { Menu } from 'antd';
 import logo from '../../assets/images/logo.png'
 import './index.css'
 import menuList from '../../config/menuList';
+import memoryUtils from '../../utils/memoryUtils'
 
 const { SubMenu } = Menu;
 //左侧导航组件
 class LeftNav extends Component {
 
+  //判断当前用户对item是否有权限
+  hasAuth = (item) => {
+    const {key,isPublic} = item
+    const menus = memoryUtils.user.data.role.menus
+    const username = memoryUtils.user.data.username
+    if(username==='admin' || isPublic || menus.indexOf(key) !== -1){
+      return true
+    }else if(item.children){
+      return !!item.children.find(child => menus.indexOf(child.key) !== -1)
+    }
+    return false
+  }
+
   //根据menu的数据生成对应的标签数组
   getMenuNodes = (menuList)=> {
     const path = this.props.location.pathname
 		return menuList.map((item) => {
-			if (!item.children) {
-				return (
-            <Menu.Item key={item.key}>
-            <Link to={item.key}>{item.title}</Link>
-            </Menu.Item>
-				);
-			} else {
-        const cItem = item.children.find(cItem => path.indexOf(cItem.key)===0)
-        if(cItem){
-          this.openKey = item.key
+
+      //如果当前用户有item权限,才需要显示对应的菜单项
+      if(this.hasAuth(item)){
+        if (!item.children) {
+          return (
+              <Menu.Item key={item.key}>
+              <Link to={item.key}>{item.title}</Link>
+              </Menu.Item>
+          );
+        } else {
+          const cItem = item.children.find(cItem => path.indexOf(cItem.key)===0)
+          if(cItem){
+            this.openKey = item.key
+          }
+          
+          return (
+            <SubMenu key={item.key} title={item.title}>
+              {this.getMenuNodes(item.children)}
+            </SubMenu>
+          );
         }
-        
-				return (
-					<SubMenu key={item.key} title={item.title}>
-						{this.getMenuNodes(item.children)}
-					</SubMenu>
-				);
-			}
+      }
+    return null
 		});
 	};
 

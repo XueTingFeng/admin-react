@@ -21,6 +21,7 @@ export default class Login extends Component {
       //保存user
       const user = res 
       memoryUtils.user = user
+      console.log(memoryUtils)
       storageUtil.saveUser(user)
   
       if(res.status === 0){

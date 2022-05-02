@@ -11,7 +11,7 @@ import { PAGE_SIZE } from '../../utils/constants'
 import { formatDate } from '../../utils/dateUtils'
 import LinkButton from '../../components/link-button'
 import UserForm from './user-form'
-import { reqUsers, reqDeleteUser } from '../../api'
+import { reqUsers, reqDeleteUser, reqAddUser } from '../../api'
 
 export default class User extends Component {
 
@@ -80,6 +80,11 @@ export default class User extends Component {
         }
     }
 
+    showUpdate = (user) => {
+        this.user = user//保存user
+        this.setState({isShow:true})
+    }
+
     deleteUser = (user) => {
         Modal.confirm({
             title: `确认删除${user.username}吗?`,
@@ -93,9 +98,23 @@ export default class User extends Component {
         })
     }
 
-    addOrUpdateUser = () => {
+    addOrUpdateUser = async () => {
+        //收集数据
         const values = this.ModalForm.current.getFormValues()
-        console.log(values)
+
+        if(this.user){
+            values._id = this.user._id
+        }
+  
+        const res = await reqAddUser(values)
+
+       if(res.status === 0){
+           message.success(`${this.user ? '修改' : '添加'}用户成功`)
+           this.setState({isShow:false})
+           this.getUsers()
+       }else{
+           message.error(`${this.user ? '修改' : '添加'}用户失败`)
+       }
        
     }
 
@@ -106,11 +125,16 @@ export default class User extends Component {
 
     render() {
 
-        const { users, isShow, } = this.state
+        const { users, isShow, roles, } = this.state
+        const { user } = this.user || {}
 
         const title = (
             <Button type='primary' 
-            onClick={() => this.setState({isShow: true})}>
+            onClick={() => {
+                this.user = null
+                this.setState({isShow: true})
+            }
+                }>
                 创建用户
             </Button>
         )
@@ -128,13 +152,14 @@ export default class User extends Component {
                 </Table>
 
                 <Modal
-                    title="添加用户"
+                    title={user?._id ? '修改用户'  : '添加用户'}
                     visible={isShow}
+                    destroyOnClose={true}
                     onOk={this.addOrUpdateUser}
-                    onCancel={() => {this.setState({isShowAdd:false})}}
+                    onCancel={() => {this.setState({isShow:false})}}
                     okButtonProps={{htmlType: 'submit',form: 'userForm'}}
                 >
-                    <UserForm ref={this.ModalForm}></UserForm>
+                    <UserForm ref={this.ModalForm} roles={roles} user={user}></UserForm>
                 </Modal>
                 </Card>
             </div>

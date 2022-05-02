@@ -11,7 +11,7 @@ export function reqLogin(username,password){
 }
 
 //注册
-export const reqAddUser = (user) => ajax('/login',user,'POST')
+export const reqAddUser = (user) => ajax('/manage/user/' + (user._id ? 'update' : 'add'),user,'POST')
 
 //高德天气接口,通过jsonp()进行跨域
 export const reqWheater = (city) => {
@@ -63,3 +63,5 @@ export const reqUpdateRole = (role) => ajax('/manage/role/update',role,'POST')
 export const reqUsers = () => ajax('/manage/user/list')
 //删除指定用户
 export const reqDeleteUser = (userId) => ajax('/manage/user/delete',{userId},'POST')
+//添加用户
+//export const reqAdminAddUser = (user) => ajax('/manage/user/add',user,'POST')

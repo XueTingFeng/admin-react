@@ -12,6 +12,8 @@ import Modal from 'antd/lib/modal/Modal'
 import { formatDate } from '../../utils/dateUtils'
 import AddForm from './add-form'
 import AuthForm from './auth-form'
+import memoryUtils from '../../utils/memoryUtils'
+import storageUtils from '../../utils/storageUtil'
 
 export default class Role extends Component {
 
@@ -119,13 +121,23 @@ export default class Role extends Component {
 
         //请求更新
         const res = await reqUpdateRole(role)
+
         if(res.status===0){
             message.success('设置角色成功')
             //this.getRoles()
-            this.setState({
-                roles:[...this.state.roles],
-                isShowAuth:false
-            })
+            if(role._id === memoryUtils.user.role._id){
+                memoryUtils.user = {}
+                storageUtils.removeUser()
+                this.props.history.replace('/login')
+                message.success('当前用户角色权限修改了,重新登录')
+            }else{
+                message.success('设置角色权限成功')
+                this.setState({
+                    roles:[...this.state.roles],
+                    isShowAuth:false
+                })
+            }
+            
         }
         
     }
