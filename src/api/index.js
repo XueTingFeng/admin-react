@@ -13,6 +13,21 @@ export function reqLogin(username,password){
 //注册
 export const reqAddUser = (user) => ajax('/manage/user/' + (user._id ? 'update' : 'add'),user,'POST')
 
+//高德查询ip地址
+export const reqIp = () => {
+    return new Promise((resolve,reject) => {
+        const key = 'b00613924c3e1bc1a6eea45a1f918126'
+        const url = `https://restapi.amap.com/v3/ip?key=${key}`
+        jsonp(url,{},(err,data) => {
+            console.log(data.city)
+        if(!err && data.status === "1"){
+            resolve(data.city)
+        }else{
+            message.error('获取天气信息失败!')
+        }
+    })
+    })
+}
 //高德天气接口,通过jsonp()进行跨域
 export const reqWheater = (city) => {
     return new Promise((resolve,reject) => {

@@ -3,7 +3,7 @@ import {withRouter} from 'react-router-dom'
 import {Modal} from 'antd'
 
 import LinkButton from '../link-button/index'
-import {reqWheater} from '../../api/index'
+import {reqWheater,reqIp} from '../../api/index'
 import menuList from '../../config/menuList'
 import {formatDate} from '../../utils/dateUtils'
 import memoryUtils from '../../utils/memoryUtils'
@@ -25,7 +25,8 @@ class Header extends Component {
     }
 
      getWeather = async() =>{
-        const {city, weather} = await reqWheater('杭州')
+        const res = await reqIp()
+        const {city, weather} = await reqWheater(res)
         this.setState({
             city,
             weather
