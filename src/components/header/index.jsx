@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 import {Modal} from 'antd'
 
 import LinkButton from '../link-button/index'
@@ -78,8 +79,9 @@ class Header extends Component {
 
     render() {
         const {currentTime,city,weather} = this.state
-        const username = memoryUtils.user.data.username
-        const title = this.getTitle()
+        const username = this.props.user.username
+        const title = this.props.headTitle
+        
         return (
             <div className='header'>
                 <div className='header-top'>
@@ -101,4 +103,10 @@ class Header extends Component {
     }
 }
 
-export default withRouter(Header)
+export default connect(
+    state => ({
+        headTitle:state.headTitle,
+        user:state.user
+    }),
+    {}
+)(withRouter(Header)) 

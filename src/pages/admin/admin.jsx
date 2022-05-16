@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import {Redirect , Route , Switch} from 'react-router-dom'
 import { Layout } from 'antd';
 
-import memoryUtils from '../../utils/memoryUtils'
-
 import LeftNav from '../../components/left-nav/index'
 import Header from '../../components/header'
 import Home from '../../pages/home/home'
@@ -14,15 +12,16 @@ import User from '../../pages/user/user'
 import Bar from '../../pages/charts/bar'
 import Line from '../../pages/charts/line'
 import Pie from '../../pages/charts/pie'
+import { connect } from 'react-redux';
 
 const { Footer, Sider, Content } = Layout;
 
-export default class Admin extends Component {
+class Admin extends Component {
     
     render() {
-        const user = memoryUtils.user
+        const user = this.props.user
 
-        if(!user || !user.data._id){
+        if(!user || !user._id){
             return <Redirect to='/login'/>
         }
 
@@ -52,3 +51,9 @@ export default class Admin extends Component {
         )
     }
 }
+
+export default connect(
+    state => ({user:state.user}),
+    {}
+)(Admin)
+

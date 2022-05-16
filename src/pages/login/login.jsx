@@ -1,36 +1,22 @@
 import React, { Component } from 'react'
-import { Form, Input, Button, message } from 'antd'
+import { Form, Input, Button } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Redirect } from 'react-router';
+import { connect } from 'react-redux';
 
 import './login.css'
 import logo from '../../assets/images/logo.png'
-import { reqLogin } from '../../api/index'
-import memoryUtils from '../../utils/memoryUtils';
-import storageUtil from '../../utils/storageUtil';
+import {setHeaderTitle,login} from '../../redux/actions'
 
 
 // 登录路由组件
-export default class Login extends Component {
+class Login extends Component {
 
    onFinish = async(values) => {
     const {username,password} = values
 
-      const res = await reqLogin(username,password)
+      this.props.login(username,password)
 
-      //保存user
-      const user = res 
-      memoryUtils.user = user
-      console.log(memoryUtils)
-      storageUtil.saveUser(user)
-  
-      if(res.status === 0){
-        message.success('登录成功')
-        //跳转到管理界面(不需要回退到登录)
-        this.props.history.replace('/')
-      }else{
-        message.error(res.msg)
-      }
   };
 
   onFinishFailed = (err) => {
@@ -52,14 +38,20 @@ export default class Login extends Component {
       return Promise.resolve('验证成功')
     }
   }
+
+  componentDidMount(){
+    this.props.setHeaderTitle('登录')
+  }
   
     render() {
 
       //如果已经登录，自动跳转管理界面
-      const user = memoryUtils.user
+      const user = this.props.user
       if(user && user._id){
-        return <Redirect to='/'/>
+        return <Redirect to='/home'/>
       }
+
+      const errMsg = this.props.user.msg
 
         return (
             <div className="login">
@@ -68,6 +60,7 @@ export default class Login extends Component {
                     <h1>后台管理系统</h1>
                 </header>
                 <section className="login-content">
+                  <div>{errMsg}</div>
                     <h2>用户登录</h2>
                     <Form className="login-form" onFinish={this.onFinish}>
                         <Form.Item name="username" 
@@ -104,3 +97,13 @@ export default class Login extends Component {
         )
     }
 }
+
+export default connect(
+  (state) => ({
+    user:state.user,
+  }),
+  {
+    setHeaderTitle,
+    login
+  }
+)(Login)
