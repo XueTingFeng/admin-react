@@ -45,7 +45,7 @@ export default class User extends Component {
             {
                 title: '所属角色',
                 dataIndex: 'role_id',
-                render: (role_id) => this.roleNames[role_id]
+                render: () => this.roleNames
             },
             {
                 title: '操作',
@@ -65,7 +65,7 @@ export default class User extends Component {
             pre[role._id] = role.name
             return pre
         }, {})
-        this.roleNames = rolesNames
+        this.roleNames = Object.values(rolesNames)[0]
     }
 
     getUsers = async () => {
@@ -101,6 +101,7 @@ export default class User extends Component {
     addOrUpdateUser = async () => {
         //收集数据
         const values = this.ModalForm.current.getFormValues()
+        console.log(values)
 
         if(this.user){
             values._id = this.user._id

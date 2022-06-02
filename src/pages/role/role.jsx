@@ -44,11 +44,6 @@ export default class Role extends Component {
                 render: (create_time) => formatDate(create_time)
             },
             {
-                title:'授权时间',
-                dataIndex:'auth_time',
-                render:formatDate
-            },
-            {
                 title:'授权人',
                 dataIndex:'auth'
             },

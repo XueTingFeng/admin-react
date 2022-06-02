@@ -34,6 +34,7 @@ class Admin extends Component {
                     <Header></Header>
                     <Content style={{margin:20,backgroundColor:'#fff'}}>
                         <Switch>
+                            <Redirect exact={true} from='/' to='/home'/>
                             <Route path='/home' component={Home}></Route>
                             <Route path='/category' component={Category}></Route>
                             <Route path='/product' component={Product}></Route>
@@ -42,7 +43,7 @@ class Admin extends Component {
                             <Route path='/charts/bar' component={Bar}></Route>
                             <Route path='/charts/line' component={Line}></Route>
                             <Route path='/charts/pie' component={Pie}></Route>
-                            <Redirect to='/home'/>
+                            <Route component={Home}></Route>
                         </Switch>
                     </Content>
                     <Footer style={{textAlign:'center',color:'#cccccc'}}>推荐使用谷歌浏览器,可以获得更佳页面操作体验</Footer>

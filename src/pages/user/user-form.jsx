@@ -26,7 +26,7 @@ export default class UserForm extends PureComponent {
 
                     <Item 
                     {...formItemLayout}
-                    name='userName' 
+                    name='username' 
                     initialValue={user.username}
                     label='用户名:'
                     rules={[
